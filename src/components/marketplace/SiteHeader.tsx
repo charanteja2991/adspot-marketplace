@@ -3,7 +3,11 @@ import { Megaphone } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 
 export function SiteHeader() {
-  const { user, signOut, requireAuth } = useAuth();
+  const { user, signOut, requireAuth, isOwner, isAdmin } = useAuth();
+  const showOwnerNav = Boolean(user) && (isOwner || isAdmin);
+
+  const navLink = "rounded-lg px-3 py-2 text-muted-foreground transition hover:text-foreground";
+  const navActive = { className: "rounded-lg px-3 py-2 text-foreground" };
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/90 backdrop-blur">
