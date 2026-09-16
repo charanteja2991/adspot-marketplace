@@ -119,7 +119,7 @@ function MyBillboardsPage() {
         <div className="mt-8 space-y-4">
           {data.map((b) => {
             const image = coverImage(b);
-            const slots = b.billboard_availability?.length ?? 0;
+            
             return (
               <div key={b.id} className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-4 sm:flex-row">
                 <div className="h-36 w-full overflow-hidden rounded-xl bg-muted sm:w-52">
@@ -158,8 +158,7 @@ function MyBillboardsPage() {
                   </p>
                   <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
                     <CalendarRange className="size-3.5" />
-                    {slots ? `${slots} availability period${slots > 1 ? "s" : ""} set` : "No availability periods set"} ·{" "}
-                    <span className="capitalize">{b.availability}</span>
+                    Availability: <span className="capitalize">{b.availability}</span>
                   </p>
                 </div>
 
@@ -230,7 +229,6 @@ function MyBillboardsPage() {
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
-        </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
