@@ -16,6 +16,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as MyBillboardsRouteImport } from './routes/my-billboards'
 import { Route as BillboardsIdRouteImport } from './routes/billboards.$id'
 import { Route as BillboardsNewRouteImport } from './routes/billboards.new'
+import { Route as BillboardsIdEditRouteImport } from './routes/billboards.$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const BillboardsNewRoute = BillboardsNewRouteImport.update({
   path: '/billboards/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BillboardsIdEditRoute = BillboardsIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => BillboardsIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,8 +65,9 @@ export interface FileRoutesByFullPath {
   '/browse': typeof BrowseRoute
   '/dashboard': typeof DashboardRoute
   '/my-billboards': typeof MyBillboardsRoute
-  '/billboards/$id': typeof BillboardsIdRoute
+  '/billboards/$id': typeof BillboardsIdRouteWithChildren
   '/billboards/new': typeof BillboardsNewRoute
+  '/billboards/$id/edit': typeof BillboardsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,8 +75,9 @@ export interface FileRoutesByTo {
   '/browse': typeof BrowseRoute
   '/dashboard': typeof DashboardRoute
   '/my-billboards': typeof MyBillboardsRoute
-  '/billboards/$id': typeof BillboardsIdRoute
+  '/billboards/$id': typeof BillboardsIdRouteWithChildren
   '/billboards/new': typeof BillboardsNewRoute
+  '/billboards/$id/edit': typeof BillboardsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,8 +86,9 @@ export interface FileRoutesById {
   '/browse': typeof BrowseRoute
   '/dashboard': typeof DashboardRoute
   '/my-billboards': typeof MyBillboardsRoute
-  '/billboards/$id': typeof BillboardsIdRoute
+  '/billboards/$id': typeof BillboardsIdRouteWithChildren
   '/billboards/new': typeof BillboardsNewRoute
+  '/billboards/$id/edit': typeof BillboardsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/my-billboards'
     | '/billboards/$id'
     | '/billboards/new'
+    | '/billboards/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/my-billboards'
     | '/billboards/$id'
     | '/billboards/new'
+    | '/billboards/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/my-billboards'
     | '/billboards/$id'
     | '/billboards/new'
+    | '/billboards/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,7 +129,7 @@ export interface RootRouteChildren {
   BrowseRoute: typeof BrowseRoute
   DashboardRoute: typeof DashboardRoute
   MyBillboardsRoute: typeof MyBillboardsRoute
-  BillboardsIdRoute: typeof BillboardsIdRoute
+  BillboardsIdRoute: typeof BillboardsIdRouteWithChildren
   BillboardsNewRoute: typeof BillboardsNewRoute
 }
 
@@ -172,8 +184,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BillboardsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/billboards/$id/edit': {
+      id: '/billboards/$id/edit'
+      path: '/edit'
+      fullPath: '/billboards/$id/edit'
+      preLoaderRoute: typeof BillboardsIdEditRouteImport
+      parentRoute: typeof BillboardsIdRoute
+    }
   }
 }
+
+interface BillboardsIdRouteChildren {
+  BillboardsIdEditRoute: typeof BillboardsIdEditRoute
+}
+
+const BillboardsIdRouteChildren: BillboardsIdRouteChildren = {
+  BillboardsIdEditRoute: BillboardsIdEditRoute,
+}
+
+const BillboardsIdRouteWithChildren = BillboardsIdRoute._addFileChildren(
+  BillboardsIdRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -181,7 +212,7 @@ const rootRouteChildren: RootRouteChildren = {
   BrowseRoute: BrowseRoute,
   DashboardRoute: DashboardRoute,
   MyBillboardsRoute: MyBillboardsRoute,
-  BillboardsIdRoute: BillboardsIdRoute,
+  BillboardsIdRoute: BillboardsIdRouteWithChildren,
   BillboardsNewRoute: BillboardsNewRoute,
 }
 export const routeTree = rootRouteImport
