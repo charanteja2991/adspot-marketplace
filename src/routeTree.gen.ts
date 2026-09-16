@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BrowseRouteImport } from './routes/browse'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BillboardsIdRouteImport } from './routes/billboards.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const BrowseRoute = BrowseRouteImport.update({
   path: '/browse',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BillboardsIdRoute = BillboardsIdRouteImport.update({
   id: '/billboards/$id',
   path: '/billboards/$id',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/browse': typeof BrowseRoute
+  '/dashboard': typeof DashboardRoute
   '/billboards/$id': typeof BillboardsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/browse': typeof BrowseRoute
+  '/dashboard': typeof DashboardRoute
   '/billboards/$id': typeof BillboardsIdRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/browse': typeof BrowseRoute
+  '/dashboard': typeof DashboardRoute
   '/billboards/$id': typeof BillboardsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/browse' | '/billboards/$id'
+  fullPaths: '/' | '/auth' | '/browse' | '/dashboard' | '/billboards/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/browse' | '/billboards/$id'
-  id: '__root__' | '/' | '/auth' | '/browse' | '/billboards/$id'
+  to: '/' | '/auth' | '/browse' | '/dashboard' | '/billboards/$id'
+  id: '__root__' | '/' | '/auth' | '/browse' | '/dashboard' | '/billboards/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   BrowseRoute: typeof BrowseRoute
+  DashboardRoute: typeof DashboardRoute
   BillboardsIdRoute: typeof BillboardsIdRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrowseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/billboards/$id': {
       id: '/billboards/$id'
       path: '/billboards/$id'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   BrowseRoute: BrowseRoute,
+  DashboardRoute: DashboardRoute,
   BillboardsIdRoute: BillboardsIdRoute,
 }
 export const routeTree = rootRouteImport
