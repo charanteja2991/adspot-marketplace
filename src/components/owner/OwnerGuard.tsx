@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -15,12 +15,17 @@ export function OwnerGuard({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const href = useRouterState({ select: (s) => s.location.href });
   const [claiming, setClaiming] = useState(false);
+  // Remember where the visitor was headed the first time we render, so the
+  // redirect target never picks up an /auth URL from a later render.
+  const intended = useRef(href);
+  const redirected = useRef(false);
 
   useEffect(() => {
-    if (!loading && !user) {
-      void navigate({ to: "/auth", search: { redirect: href }, replace: true });
+    if (!loading && !user && !redirected.current && !intended.current.startsWith("/auth")) {
+      redirected.current = true;
+      void navigate({ to: "/auth", search: { redirect: intended.current }, replace: true });
     }
-  }, [loading, user, href, navigate]);
+  }, [loading, user, navigate]);
 
   if (loading || !user) {
     return (
