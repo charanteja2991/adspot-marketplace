@@ -154,7 +154,7 @@ function MyBillboardsPage() {
                   </p>
                   <p className="mt-2 font-semibold">
                     {formatMoney(b.price, b.currency)}{" "}
-                    <span className="text-sm font-normal text-muted-foreground">/{periodShort(b.price_period)}</span>
+                    <span className="text-sm font-normal text-muted-foreground">{periodShort(b.price_period)}</span>
                   </p>
                   <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
                     <CalendarRange className="size-3.5" />
