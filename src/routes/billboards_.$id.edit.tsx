@@ -5,7 +5,7 @@ import { OwnerGuard } from "@/components/owner/OwnerGuard";
 import { BillboardWizard, type WizardInitial } from "@/components/owner/BillboardWizard";
 import { fetchOwnerAvailability, fetchOwnerBillboard } from "@/lib/owner-queries";
 
-export const Route = createFileRoute("/billboards/$id/edit")({
+export const Route = createFileRoute("/billboards_/$id/edit")({
   head: () => ({
     meta: [
       { title: "Edit billboard — Panorama" },
