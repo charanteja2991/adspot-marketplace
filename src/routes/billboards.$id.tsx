@@ -168,7 +168,7 @@ function BillboardDetail() {
                 {availability.map((slot) => (
                   <li key={slot.id} className="flex items-center justify-between gap-2">
                     <span className="text-muted-foreground">{formatDateRange(slot.start_date, slot.end_date)}</span>
-                    <span className="font-medium">{availabilityLabel(slot.status)}</span>
+                    <span className="font-medium">{slot.is_available ? "Available" : "Blocked"}</span>
                   </li>
                 ))}
               </ul>
