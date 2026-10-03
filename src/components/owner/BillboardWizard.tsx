@@ -108,7 +108,7 @@ export function BillboardWizard({ initial }: { initial?: WizardInitial }) {
       const target = index + direction;
       if (target < 0 || target >= prev.length) return prev;
       const copy = [...prev];
-      [copy[index], copy[target]] = [copy[target], copy[index]];
+      [copy[index], copy[target]] = [copy[target]!, copy[index]!];
       return copy;
     });
   }
