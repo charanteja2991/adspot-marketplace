@@ -40,27 +40,12 @@ export function OwnerGuard({ children }: { children: ReactNode }) {
       <div className="mx-auto max-w-lg px-4 py-20 text-center">
         <h1 className="font-display text-2xl font-semibold">Owner area</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          This section is for billboard owners. Switch your account to an owner account to list and manage
-          advertising spaces.
+          This section is for billboard owners. Your account is an advertiser account, so you can browse and save
+          spaces from your advertiser dashboard.
         </p>
         <div className="mt-6 flex justify-center gap-3">
-          <Button
-            disabled={claiming}
-            onClick={async () => {
-              setClaiming(true);
-              try {
-                await ensureOwnerRole(user.id);
-                await refreshProfile();
-                toast.success("Owner access enabled");
-              } catch {
-                toast.error("Could not enable owner access. Please try again.");
-              } finally {
-                setClaiming(false);
-              }
-            }}
-          >
-            {claiming ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
-            Become an owner
+          <Button asChild>
+            <Link to="/account">Advertiser dashboard</Link>
           </Button>
           <Button variant="outline" asChild>
             <Link to="/browse" search={{}}>
