@@ -10,10 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as MyBillboardsRouteImport } from './routes/my-billboards'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SavedRouteImport } from './routes/saved'
 import { Route as BillboardsIdRouteImport } from './routes/billboards.$id'
 import { Route as BillboardsNewRouteImport } from './routes/billboards.new'
 import { Route as BillboardsIdEditRouteImport } from './routes/billboards_.$id.edit'
@@ -21,6 +24,11 @@ import { Route as BillboardsIdEditRouteImport } from './routes/billboards_.$id.e
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -43,6 +51,16 @@ const MyBillboardsRoute = MyBillboardsRouteImport.update({
   path: '/my-billboards',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SavedRoute = SavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BillboardsIdRoute = BillboardsIdRouteImport.update({
   id: '/billboards/$id',
   path: '/billboards/$id',
@@ -61,20 +79,26 @@ const BillboardsIdEditRoute = BillboardsIdEditRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/browse': typeof BrowseRoute
   '/dashboard': typeof DashboardRoute
   '/my-billboards': typeof MyBillboardsRoute
+  '/profile': typeof ProfileRoute
+  '/saved': typeof SavedRoute
   '/billboards/$id': typeof BillboardsIdRoute
   '/billboards/new': typeof BillboardsNewRoute
   '/billboards/$id/edit': typeof BillboardsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/browse': typeof BrowseRoute
   '/dashboard': typeof DashboardRoute
   '/my-billboards': typeof MyBillboardsRoute
+  '/profile': typeof ProfileRoute
+  '/saved': typeof SavedRoute
   '/billboards/$id': typeof BillboardsIdRoute
   '/billboards/new': typeof BillboardsNewRoute
   '/billboards/$id/edit': typeof BillboardsIdEditRoute
@@ -82,10 +106,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/browse': typeof BrowseRoute
   '/dashboard': typeof DashboardRoute
   '/my-billboards': typeof MyBillboardsRoute
+  '/profile': typeof ProfileRoute
+  '/saved': typeof SavedRoute
   '/billboards/$id': typeof BillboardsIdRoute
   '/billboards/new': typeof BillboardsNewRoute
   '/billboards_/$id/edit': typeof BillboardsIdEditRoute
@@ -94,30 +121,39 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account'
     | '/auth'
     | '/browse'
     | '/dashboard'
     | '/my-billboards'
+    | '/profile'
+    | '/saved'
     | '/billboards/$id'
     | '/billboards/new'
     | '/billboards/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/account'
     | '/auth'
     | '/browse'
     | '/dashboard'
     | '/my-billboards'
+    | '/profile'
+    | '/saved'
     | '/billboards/$id'
     | '/billboards/new'
     | '/billboards/$id/edit'
   id:
     | '__root__'
     | '/'
+    | '/account'
     | '/auth'
     | '/browse'
     | '/dashboard'
     | '/my-billboards'
+    | '/profile'
+    | '/saved'
     | '/billboards/$id'
     | '/billboards/new'
     | '/billboards_/$id/edit'
@@ -125,10 +161,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRoute: typeof AccountRoute
   AuthRoute: typeof AuthRoute
   BrowseRoute: typeof BrowseRoute
   DashboardRoute: typeof DashboardRoute
   MyBillboardsRoute: typeof MyBillboardsRoute
+  ProfileRoute: typeof ProfileRoute
+  SavedRoute: typeof SavedRoute
   BillboardsIdRoute: typeof BillboardsIdRoute
   BillboardsNewRoute: typeof BillboardsNewRoute
   BillboardsIdEditRoute: typeof BillboardsIdEditRoute
@@ -141,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -171,6 +217,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyBillboardsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/saved': {
+      id: '/saved'
+      path: '/saved'
+      fullPath: '/saved'
+      preLoaderRoute: typeof SavedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/billboards/$id': {
       id: '/billboards/$id'
       path: '/billboards/$id'
@@ -197,10 +257,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRoute: AccountRoute,
   AuthRoute: AuthRoute,
   BrowseRoute: BrowseRoute,
   DashboardRoute: DashboardRoute,
   MyBillboardsRoute: MyBillboardsRoute,
+  ProfileRoute: ProfileRoute,
+  SavedRoute: SavedRoute,
   BillboardsIdRoute: BillboardsIdRoute,
   BillboardsNewRoute: BillboardsNewRoute,
   BillboardsIdEditRoute: BillboardsIdEditRoute,
