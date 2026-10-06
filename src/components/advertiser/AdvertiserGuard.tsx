@@ -4,16 +4,11 @@ import { Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 
-/**
- * Client-side gate for owner-only pages. Public browsing stays open; only these
- * pages require a session, and only the owner role may pass.
- */
-export function OwnerGuard({ children }: { children: ReactNode }) {
+/** Signed-in advertiser pages. Owners are pointed to their own dashboard. */
+export function AdvertiserGuard({ children }: { children: ReactNode }) {
   const { user, loading, isOwner, isAdmin } = useAuth();
   const navigate = useNavigate();
   const href = useRouterState({ select: (s) => s.location.href });
-  // Remember where the visitor was headed the first time we render, so the
-  // redirect target never picks up an /auth URL from a later render.
   const intended = useRef(href);
   const redirected = useRef(false);
 
@@ -32,24 +27,16 @@ export function OwnerGuard({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!isOwner && !isAdmin) {
+  if (isOwner && !isAdmin) {
     return (
       <div className="mx-auto max-w-lg px-4 py-20 text-center">
-        <h1 className="font-display text-2xl font-semibold">Owner area</h1>
+        <h1 className="font-display text-2xl font-semibold">Advertiser area</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          This section is for billboard owners. Your account is an advertiser account, so you can browse and save
-          spaces from your advertiser dashboard.
+          This section is for advertiser accounts. Your account is set up as a billboard owner.
         </p>
-        <div className="mt-6 flex justify-center gap-3">
-          <Button asChild>
-            <Link to="/account">Advertiser dashboard</Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link to="/browse" search={{}}>
-              Browse billboards
-            </Link>
-          </Button>
-        </div>
+        <Button className="mt-6" asChild>
+          <Link to="/dashboard">Go to owner dashboard</Link>
+        </Button>
       </div>
     );
   }

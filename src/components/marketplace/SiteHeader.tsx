@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { LayoutDashboard, LogOut, Megaphone, Menu, Plus, Building2 } from "lucide-react";
+import { LayoutDashboard, LogOut, Megaphone, Menu, Plus, Building2, Heart, UserRound } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -11,6 +11,7 @@ const navActive = { className: "rounded-lg px-3 py-2 text-foreground" };
 export function SiteHeader() {
   const { user, signOut, requireAuth, isOwner, isAdmin } = useAuth();
   const showOwnerNav = Boolean(user) && (isOwner || isAdmin);
+  const showAdvertiserNav = Boolean(user) && !isOwner && !isAdmin;
   const [open, setOpen] = useState(false);
 
   const signInPrompt = () =>
@@ -51,6 +52,20 @@ export function SiteHeader() {
                   <Plus className="mr-1.5 size-4" /> Add billboard
                 </Link>
               </Button>
+            </>
+          ) : null}
+
+          {showAdvertiserNav ? (
+            <>
+              <Link to="/saved" className={navLink} activeProps={navActive}>
+                Saved
+              </Link>
+              <Link to="/account" className={navLink} activeProps={navActive}>
+                Dashboard
+              </Link>
+              <Link to="/profile" className={navLink} activeProps={navActive}>
+                Profile
+              </Link>
             </>
           ) : null}
 
@@ -106,6 +121,20 @@ export function SiteHeader() {
                       <span className="inline-flex items-center gap-2">
                         <Plus className="size-4" /> Add billboard
                       </span>
+                    </Link>
+                  </>
+                ) : null}
+
+                {showAdvertiserNav ? (
+                  <>
+                    <Link to="/saved" className={navLink} onClick={() => setOpen(false)}>
+                      <span className="inline-flex items-center gap-2"><Heart className="size-4" /> Saved billboards</span>
+                    </Link>
+                    <Link to="/account" className={navLink} onClick={() => setOpen(false)}>
+                      <span className="inline-flex items-center gap-2"><LayoutDashboard className="size-4" /> Dashboard</span>
+                    </Link>
+                    <Link to="/profile" className={navLink} onClick={() => setOpen(false)}>
+                      <span className="inline-flex items-center gap-2"><UserRound className="size-4" /> Profile</span>
                     </Link>
                   </>
                 ) : null}
