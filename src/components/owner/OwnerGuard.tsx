@@ -1,20 +1,17 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { ensureOwnerRole } from "@/lib/owner-queries";
 
 /**
  * Client-side gate for owner-only pages. Public browsing stays open; only these
  * pages require a session, and only the owner role may pass.
  */
 export function OwnerGuard({ children }: { children: ReactNode }) {
-  const { user, loading, isOwner, isAdmin, refreshProfile } = useAuth();
+  const { user, loading, isOwner, isAdmin } = useAuth();
   const navigate = useNavigate();
   const href = useRouterState({ select: (s) => s.location.href });
-  const [claiming, setClaiming] = useState(false);
   // Remember where the visitor was headed the first time we render, so the
   // redirect target never picks up an /auth URL from a later render.
   const intended = useRef(href);
