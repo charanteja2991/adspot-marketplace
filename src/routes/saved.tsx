@@ -101,11 +101,11 @@ function SavedPage() {
                   <p className="text-sm text-muted-foreground">{locationLine(b)}</p>
                   <dl className="mt-3 grid grid-cols-2 gap-y-1 text-sm">
                     <dt className="text-muted-foreground">Price</dt>
-                    <dd className="text-right font-medium">{formatMoney(b.price, b.currency)}{periodShort[b.price_period]}</dd>
+                    <dd className="text-right font-medium">{formatMoney(b.price, b.currency)}{periodShort(b.price_period)}</dd>
                     <dt className="text-muted-foreground">Size</dt>
                     <dd className="text-right">{dimensions(b)}</dd>
                     <dt className="text-muted-foreground">Availability</dt>
-                    <dd className="text-right">{availabilityLabel[b.availability]}</dd>
+                    <dd className="text-right">{availabilityLabel(b.availability)}</dd>
                     <dt className="text-muted-foreground">Status</dt>
                     <dd className="text-right">Published</dd>
                   </dl>
