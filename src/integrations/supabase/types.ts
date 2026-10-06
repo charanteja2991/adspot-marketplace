@@ -377,6 +377,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          city: string | null
           company_name: string | null
           created_at: string
           display_name: string
@@ -386,6 +387,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          city?: string | null
           company_name?: string | null
           created_at?: string
           display_name?: string
@@ -395,6 +397,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          city?: string | null
           company_name?: string | null
           created_at?: string
           display_name?: string
