@@ -74,7 +74,10 @@ function ProfilePage() {
         className="mt-6 space-y-4 rounded-2xl border border-border bg-card p-6"
         onSubmit={(e) => {
           e.preventDefault();
-          if (!form.display_name.trim()) return toast.error("Contact name is required");
+          if (!form.display_name.trim()) {
+            toast.error("Contact name is required");
+            return;
+          }
           save.mutate();
         }}
       >
