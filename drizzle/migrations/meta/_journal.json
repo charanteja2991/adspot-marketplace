@@ -8,6 +8,13 @@
       "when": 1791286558532,
       "tag": "0000_advertiser_foundation",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791394798985,
+      "tag": "0001_owner_only_listing_writes",
+      "breakpoints": true
     }
   ]
 }
