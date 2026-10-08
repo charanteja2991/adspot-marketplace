@@ -43,6 +43,7 @@ export type BillboardInput = {
   price: number;
   currency: string;
   price_period: PricePeriod;
+  min_booking_days: number;
   availability: AvailabilityStatus;
   status: ListingStatus;
 };

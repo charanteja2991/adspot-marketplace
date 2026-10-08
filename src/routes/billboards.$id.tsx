@@ -156,6 +156,12 @@ function BillboardDetail() {
             <span className="mt-4 inline-block rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
               {availabilityLabel(billboard.availability)}
             </span>
+            <p className="mt-4 text-sm">
+              <span className="text-muted-foreground">Minimum booking period:</span>{" "}
+              <span className="font-semibold">
+                {billboard.min_booking_days} day{billboard.min_booking_days === 1 ? "" : "s"}
+              </span>
+            </p>
             <p className="mt-4 text-xs text-muted-foreground">
               Booking requests open up once you sign in — browsing stays free and open.
             </p>
@@ -165,7 +171,9 @@ function BillboardDetail() {
             <div className="rounded-2xl border border-border bg-card p-6">
               <h2 className="font-display text-base font-semibold">Availability calendar</h2>
               <ul className="mt-3 space-y-2 text-sm">
-                {availability.map((slot) => (
+                {[...availability]
+                  .sort((a, z) => a.start_date.localeCompare(z.start_date))
+                  .map((slot) => (
                   <li key={slot.id} className="flex items-center justify-between gap-2">
                     <span className="text-muted-foreground">{formatDateRange(slot.start_date, slot.end_date)}</span>
                     <span className="font-medium">{slot.is_available ? "Available" : "Blocked"}</span>

@@ -49,9 +49,31 @@ const EMPTY: BillboardInput = {
   price: 0,
   currency: "INR",
   price_period: "monthly",
+  min_booking_days: 30,
   availability: "available",
   status: "draft",
 };
+
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Date-only range checks. Overlaps are rejected only between ranges of the same kind;
+ * a blocked range inside an available one is the intended way to carve out dates. */
+function slotsError(slots: AvailabilityDraft[]): string | null {
+  for (const [i, s] of slots.entries()) {
+    if (!DATE_RE.test(s.start_date) || !DATE_RE.test(s.end_date) || Number.isNaN(Date.parse(s.start_date)) || Number.isNaN(Date.parse(s.end_date)))
+      return `Date range ${i + 1} needs a valid start and end date.`;
+    if (s.end_date < s.start_date) return `Date range ${i + 1} ends before it starts.`;
+  }
+  for (let i = 0; i < slots.length; i += 1) {
+    for (let j = i + 1; j < slots.length; j += 1) {
+      const a = slots[i]!;
+      const b = slots[j]!;
+      if (a.is_available === b.is_available && a.start_date <= b.end_date && b.start_date <= a.end_date)
+        return `${a.is_available ? "Available" : "Blocked"} ranges ${i + 1} and ${j + 1} overlap — merge them into one range.`;
+    }
+  }
+  return null;
+}
 
 export function BillboardWizard({ initial }: { initial?: WizardInitial }) {
   const { user } = useAuth();
@@ -76,6 +98,9 @@ export function BillboardWizard({ initial }: { initial?: WizardInitial }) {
     }
     if (index === 2 && (form.width <= 0 || form.height <= 0)) return "Width and height must be greater than zero.";
     if (index === 3 && form.price <= 0) return "Set a price greater than zero.";
+    if (index === 3 && (!Number.isInteger(form.min_booking_days) || form.min_booking_days < 1 || form.min_booking_days > 3650))
+      return "Minimum booking period must be a whole number of days, at least 1.";
+    if (index === 5) return slotsError(slots);
     return null;
   }
 
@@ -115,7 +140,7 @@ export function BillboardWizard({ initial }: { initial?: WizardInitial }) {
 
   async function save(status: "draft" | "published") {
     if (!user) return;
-    for (let i = 0; i < 4; i += 1) {
+    for (const i of [0, 1, 2, 3, 5]) {
       const error = stepError(i);
       if (error) {
         toast.error(error);
@@ -309,6 +334,18 @@ export function BillboardWizard({ initial }: { initial?: WizardInitial }) {
                 ))}
               </select>
             </div>
+            <div className="grid gap-2 sm:col-span-2">
+              <Label htmlFor="min-days">Minimum booking period (days)</Label>
+              <Input
+                id="min-days"
+                type="number"
+                min="1"
+                step="1"
+                value={Number.isNaN(form.min_booking_days) ? "" : form.min_booking_days}
+                onChange={(e) => set("min_booking_days", e.target.value === "" ? NaN : Number(e.target.value))}
+              />
+              <p className="text-xs text-muted-foreground">Advertisers can't request fewer days than this.</p>
+            </div>
           </div>
         )}
 
@@ -364,8 +401,12 @@ export function BillboardWizard({ initial }: { initial?: WizardInitial }) {
         {step === 5 && (
           <div className="grid gap-4">
             <p className="text-sm text-muted-foreground">
-              Add the date ranges when this space is free — or block out dates that are already taken.
+              Add one or more separate date ranges when this space is free, and block out dates inside them that
+              aren't available. Blocked ranges always take priority over available ones.
             </p>
+            {slots.length === 0 && (
+              <p className="text-sm text-muted-foreground">No date ranges yet.</p>
+            )}
             {slots.map((slot, index) => (
               <div key={index} className="grid gap-3 rounded-xl border border-border p-3 sm:grid-cols-[1fr_1fr_auto_auto]">
                 <Input
@@ -398,7 +439,17 @@ export function BillboardWizard({ initial }: { initial?: WizardInitial }) {
                 setSlots((prev) => [...prev, { start_date: today, end_date: today, is_available: true, note: null }]);
               }}
             >
-              Add date range
+              + Create multiple separate available ranges
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => {
+                const today = new Date().toISOString().slice(0, 10);
+                setSlots((prev) => [...prev, { start_date: today, end_date: today, is_available: false, note: null }]);
+              }}
+            >
+              + Add blocked range
             </Button>
           </div>
         )}
@@ -433,6 +484,11 @@ export function BillboardWizard({ initial }: { initial?: WizardInitial }) {
                 <p className="font-display text-lg font-semibold">
                   {formatMoney(form.price, form.currency)}
                   <span className="text-xs font-normal text-muted-foreground">{periodShort(form.price_period)}</span>
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Minimum booking period: {form.min_booking_days} day{form.min_booking_days === 1 ? "" : "s"} ·{" "}
+                  {slots.filter((s) => s.is_available).length} available range(s),{" "}
+                  {slots.filter((s) => !s.is_available).length} blocked range(s)
                 </p>
                 {form.description ? <p className="text-sm">{form.description}</p> : null}
               </div>
