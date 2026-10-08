@@ -91,6 +91,7 @@ function toInitial(
       price: Number(b.price),
       currency: b.currency,
       price_period: b.price_period,
+      min_booking_days: b.min_booking_days ?? 30,
       availability: b.availability,
       status: b.status,
     },
