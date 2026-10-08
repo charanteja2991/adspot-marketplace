@@ -112,6 +112,7 @@ export type Database = {
           is_visible: boolean
           latitude: number
           longitude: number
+          min_booking_days: number
           owner_id: string
           price: number
           price_period: Database["public"]["Enums"]["price_period"]
@@ -139,6 +140,7 @@ export type Database = {
           is_visible?: boolean
           latitude: number
           longitude: number
+          min_booking_days?: number
           owner_id: string
           price: number
           price_period?: Database["public"]["Enums"]["price_period"]
@@ -166,6 +168,7 @@ export type Database = {
           is_visible?: boolean
           latitude?: number
           longitude?: number
+          min_booking_days?: number
           owner_id?: string
           price?: number
           price_period?: Database["public"]["Enums"]["price_period"]
