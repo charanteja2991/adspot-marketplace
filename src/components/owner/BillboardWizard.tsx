@@ -105,13 +105,23 @@ export function BillboardWizard({ initial }: { initial?: WizardInitial }) {
     return null;
   }
 
-  function next() {
-    const error = stepError(step);
-    if (error) {
-      toast.error(error);
-      return;
+  /** Moving forward requires every earlier step to be valid; stops at the first invalid step. */
+  function goTo(target: number) {
+    if (target > step || target === STEPS.length - 1) {
+      for (let i = 0; i < target; i += 1) {
+        const error = stepError(i);
+        if (error) {
+          toast.error(error);
+          setStep(i);
+          return;
+        }
+      }
     }
-    setStep((s) => Math.min(s + 1, STEPS.length - 1));
+    setStep(Math.max(0, Math.min(target, STEPS.length - 1)));
+  }
+
+  function next() {
+    goTo(step + 1);
   }
 
   async function handleUpload(files: FileList | null) {
