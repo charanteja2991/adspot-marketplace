@@ -49,7 +49,8 @@ const EMPTY: BillboardInput = {
   price: 0,
   currency: "INR",
   price_period: "monthly",
-  min_booking_days: 30,
+  // No platform default: new listings must have the owner enter their own minimum.
+  min_booking_days: NaN,
   availability: "available",
   status: "draft",
 };
