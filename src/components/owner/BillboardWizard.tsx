@@ -184,7 +184,7 @@ export function BillboardWizard({ initial }: { initial?: WizardInitial }) {
           <li key={label}>
             <button
               type="button"
-              onClick={() => setStep(index)}
+              onClick={() => goTo(index)}
               className={`rounded-full border px-3 py-1.5 transition ${
                 index === step
                   ? "border-brand bg-brand text-primary-foreground"
